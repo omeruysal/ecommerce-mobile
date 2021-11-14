@@ -13,7 +13,7 @@ const CategoryFilter = (props) => {
                 <TouchableOpacity
                      key={1}
                      onPress={()=>{
-                         props.categoryFilter('alls'), props.setActive(-1)
+                         props.categoryFilter('all'), props.setActive(-1)
                      }}
                      >
                          <Badge style={[styles.center,{margin : 5},props.active === -1 ? styles.active : styles.inactive]}>
