@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, FlatList, ScrollView } from 'react-native'
+import { StyleSheet, View, FlatList, ScrollView, Alert, Dimensions } from 'react-native'
 import ProductList from './ProductList'
 import { Container, Header, Icon, Item, Input, Text } from 'native-base'
 import SearchedProducts from './SearchedProducts'
@@ -7,6 +7,8 @@ import Banner from '../../Components/Banner'
 import CategoryFilter from './CategoryFilter'
 const data = require('../../assets/data/products.json')
 const productCategories = require('../../assets/data/categories.json')
+const { height }=Dimensions.get("window");
+
 
 const ProductContainer = () => {
     const [products, setProducts] = useState([])
@@ -33,7 +35,7 @@ const ProductContainer = () => {
             setInitialState()
         }
     }, [])
-    const searchProduct = (text) => {
+   const searchProduct = (text) => { // This part should be take care on backend
         setProductsFiltered(
             products.filter((i) => i.name.toLowerCase().includes(text.toLowerCase()))
         )
@@ -48,9 +50,8 @@ const ProductContainer = () => {
         
         {
             ctg === 'all'
-                ? [setProductsCtg(initialState), setActive(true)]
-                : [setProductsCtg(products.filter((i) => i.category.$oid === ctg)),
-                setActive(true)]
+                ? setProductsCtg(initialState)
+                : [setProductsCtg(products.filter((i) => i.category.$oid === ctg))]
         }
     }
     return (
@@ -97,19 +98,11 @@ const ProductContainer = () => {
                                 })}
                             </View>
                         ):(
-                            <View style={[styles.center, {height: '40%'}]}>
+                            <View style={[styles.center, {height: height / 2}]}>
                                 <Text>No products found</Text>
                             </View>
                         )}
-                        {/* <View style={styles.listContainer}>
-                            <FlatList
-                                numColumns={2}
-                                data={products}
-                                renderItem={({ item }) =>
-                                    <ProductList key={item.id} item={item} />}
-                                keyExtractor={item => item.name}
-                            />
-                        </View> */}
+                    
                     </ScrollView>
                 )}
 
@@ -136,3 +129,13 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 })
+
+    {/* <View style={styles.listContainer}>
+                            <FlatList
+                                numColumns={2}
+                                data={products}
+                                renderItem={({ item }) =>
+                                    <ProductList key={item.id} item={item} />}
+                                keyExtractor={item => item.name}
+                            />
+                        </View> */}
