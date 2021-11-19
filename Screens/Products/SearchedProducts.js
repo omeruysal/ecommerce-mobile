@@ -1,9 +1,11 @@
 import React from 'react'
 import { StyleSheet,Dimensions, View } from 'react-native'
 import {Content,Header,Body,Thumbnail,Left,ListItem,Text} from 'native-base'
+import { useNavigation } from '@react-navigation/core'
 
 let {width} = Dimensions.get("window")
 const SearchedProducts = (props) => {
+    const {navigate} = useNavigation()
     const { productsFiltered} = props
     return (
        <Content style={{width}}>
@@ -11,6 +13,7 @@ const SearchedProducts = (props) => {
                productsFiltered.map((item)=>(
                    <ListItem
                    key={item._id.$oid}
+                   onPress={()=>{navigate('Product Detail',{item});}}
                    avatar
                    >
                        <Left>
