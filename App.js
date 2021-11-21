@@ -1,18 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
 import React ,{}from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import Header from './Components/Header';
-import ProductContainer from './Screens/Products/ProductContainer';
-import {NavigationContainer} from '@react-navigation/native'
 import Main from './Navigators/Main'
 
+//Redux
+import {Provider} from 'react-redux'
+import store from './Redux/store';
+
+//Navigation
+import {NavigationContainer} from '@react-navigation/native'
 
 export default function App() {
   return (
-    <NavigationContainer>
-        <Header/>
-        <Main/>
-    </NavigationContainer>
+    <Provider store={store}>
+        <NavigationContainer>
+            <Header/>
+            <Main/>
+        </NavigationContainer>
+    </Provider>
   );
 }
 
