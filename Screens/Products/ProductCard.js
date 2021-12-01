@@ -37,7 +37,6 @@ const ProductCard = (props) => {
         </View>
     )
 }
-
 export default ProductCard
 
 const styles = StyleSheet.create({
