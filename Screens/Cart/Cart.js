@@ -2,6 +2,7 @@ import React, { useEffect,useState } from 'react'
 import { useNavigation } from '@react-navigation/core';
 import { StyleSheet, View,Dimensions,Button } from 'react-native'
 import {useDispatch, useSelector} from 'react-redux';
+import {SwipeListView} from 'react-native-swipe-list-view';
 import {
     Container,
     Text,
@@ -14,6 +15,9 @@ import {
   } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {clearCart, removeFromCart} from '../../Redux/Actions/cartActions'
+import CartItem from '../Admin/CartItem';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
 var { height, width } = Dimensions.get("window");
 
 const Cart = () => {
@@ -23,50 +27,56 @@ const Cart = () => {
     const cartItems = useSelector(state => state.cartItems);
     
     useEffect(() => {
+        setTotal(0);
         cartItems.map(e => {
-           setTotal(total+e.price);
+           setTotal(pr=> {return pr+e.price});
         });
     }, [cartItems])
     
     const clear =()=> {
+        setTotal(0);
         dispatch(clearCart());
+    }
+    const removeSingleProduct =(item)=>{
+    dispatch(removeFromCart(item));
+     
     }
     return (
         <>
             {cartItems.length ? (
                 <Container>
                     <H1 style={{alignSelf:'center'}}>Cart</H1>
-                    {cartItems.map(item=>{
-                        return (
-                         <ListItem
-                            style={''}
-                            avatar
-                            key={Math.random()}>
-                               <Left>
-                                 <Thumbnail
-                                 source={{uri: item.image ? item.image 
-                                     : 'https://cdn.pixabay.com/photo/2012/04/01/17/29/box-23649_960_720.png' }}/>
-                                </Left>
-                                <Body style={styles.body}>
-                                    <Left>
-                                        <Text>{item.name}</Text>
-                                    </Left>
-                                    <Right>
-                                    <Text>$ {item.price}</Text>
-                                    </Right>
-                                </Body>
-                        </ListItem>
-                        )
-                    })}
+                    <SwipeListView
+                    data={cartItems}
+                    renderItem={(data)=>(
+                        <CartItem item={data}/>
+                    )}
+                    renderHiddenItem={(data)=>(
+                        <View style={styles.hiddenContainer}>
+                            <TouchableOpacity 
+                            onPress={()=>removeSingleProduct(data.item)}
+                            style={styles.hiddenButton}>
+                                <Icon name="trash" color={"white"} size={30}/>
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                    disableRightSwipe={true}
+                    previewOpenDelay={3000}
+                    friction={1000}
+                    tension={40}
+                    leftOpenValue={75}
+                    stopLeftSwipe={75}
+                    rightOpenValue={-75}
+                    />
                     <View style={styles.bottomContainer}>
                         <Left>
-                            <Text style={styles.price}>$ {total}</Text>
+                            <Text style={styles.price}>$ {total.toFixed(2)}</Text>
                         </Left>
                         <Right>
-                                    <Button title='Clear' onPress={()=>clear()}/>
+                            <Button title='Clear' onPress={()=>clear()}/>
                         </Right>
                         <Right>
-                                    <Button title='Checkout' onPress={()=>navigate('Checkout')} />
+                            <Button title='Checkout' onPress={()=>navigate('Checkout')} />
                         </Right>
                     </View>
                 </Container>
@@ -96,10 +106,6 @@ const styles = StyleSheet.create({
           backgroundColor: 'white',
           elevation: 20
       },
-      body : {
-          flexDirection: 'row',
-          marginRight: 10
-      },
       price: {
           fontSize: 18,
           margin: 20,
@@ -117,5 +123,18 @@ const styles = StyleSheet.create({
         paddingRight: 25,
         height: 70,
         width: width / 1.2
+      },
+      hiddenContainer: {
+          flex: 1,
+          justifyContent: 'flex-end',
+          flexDirection: 'row'
+      },
+      hiddenButton: {
+          backgroundColor: 'red',
+          justifyContent: 'center',
+          alignItems: 'flex-end',
+          paddingRight: 25,
+          height: 70,
+          width: width / 1.2
       }
 })
