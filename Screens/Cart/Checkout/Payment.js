@@ -31,12 +31,9 @@ const paymentCards = [
 const Payment = (props) => {
     const {navigate} = useNavigation()
     const route = useRoute();
-
-     const order = route.params;
-    
-
     const [selected, setSelected] = useState();
     const [card, setCard] = useState();
+    const order = route.params;
     return (
         <Container>
         <Header>
