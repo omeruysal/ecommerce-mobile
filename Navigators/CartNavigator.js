@@ -13,7 +13,7 @@ const CartNavigator = () => {
            <Stack.Screen name='Cart' component={Cart}
            options={{ headerShown:false }}/>
            <Stack.Screen name='Checkout' component={CheckoutNavigator}
-           options={{ headerShown:false }}/>
+           />
        </Stack.Navigator>
     )
 }

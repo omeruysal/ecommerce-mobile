@@ -15,7 +15,7 @@ import {
   } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {clearCart, removeFromCart} from '../../Redux/Actions/cartActions'
-import CartItem from '../Admin/CartItem';
+import CartItem from './CartItem';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 var { height, width } = Dimensions.get("window");
