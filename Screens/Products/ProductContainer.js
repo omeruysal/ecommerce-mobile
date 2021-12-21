@@ -5,7 +5,9 @@ import { Container, Header, Icon, Item, Input, Text } from 'native-base'
 import SearchedProducts from './SearchedProducts'
 import Banner from '../../Components/Banner'
 import CategoryFilter from './CategoryFilter'
-const data = require('../../assets/data/products.json')
+import baseURL from '../../assets/common/baseUrl'
+import axios from 'axios'
+//const data = require('../../assets/data/products.json')
 const productCategories = require('../../assets/data/categories.json')
 const { height }=Dimensions.get("window");
 
@@ -19,13 +21,17 @@ const ProductContainer = () => {
     const [focus, setFocus] = useState()
     const [initialState, setInitialState] = useState()
     useEffect(() => {
-        setProducts(data)
-        setProductsFiltered(data)
         setFocus(false)
         setCategories(productCategories)
         setActive(-1)
-        setInitialState(data)
-        setProductsCtg(data)
+
+        axios.get(`${baseURL}products`)
+        .then((res)=>{
+        setProducts(res.data)
+        setProductsFiltered(res.data)
+        setInitialState(res.data)
+        setProductsCtg(res.data)
+        })
         return () => {
             setProducts([])
             setProductsFiltered([])
@@ -91,7 +97,7 @@ const ProductContainer = () => {
                                 {productsCtg.map((item)=>{
                                     return(
                                         <ProductList
-                                        key={item._id.$oid}
+                                        key={item._id}
                                         item={item}
                                         />
                                     )
