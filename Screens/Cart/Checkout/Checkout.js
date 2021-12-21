@@ -26,6 +26,7 @@ const Checkout = () => {
     const [ user, setUser ] = useState();
 
     useEffect(() => {
+        console.log(cartItems);
         setOrderItems(cartItems);
 
         return () => {
